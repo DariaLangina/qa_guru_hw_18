@@ -1,19 +1,22 @@
 package dlangina.tests;
 
-import static dlangina.base.Api.authCookies;
-
 import dlangina.base.TestBase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 public class WishlistPageTests extends TestBase {
 
   @BeforeEach
   void ensurePrecondition() {
-    api.openBrowserAndLoginByAPI("dlangina@qa.guru", "dlangina@qa.guru1");
-    api.addToWishListWithResponse(authCookies, "addproducttocart/details/14/2");
+    String email = "dlangina@qa.guru";
+    String pass = "dlangina@qa.guru1";
+    String product = "addproducttocart/details/14/2";
+
+    api.openBrowserAndLoginByAPI(email, pass);
+    api.addProductToWishListByApi(email, pass, product);
     navigation.openWishlistPage();
   }
 
@@ -23,10 +26,9 @@ public class WishlistPageTests extends TestBase {
   }
 
   @Test
+  @Tag("UI")
   @DisplayName("Проверка оторажения товара на странице Wishlist")
   void addToWishList() {
     wishlistPage.checkProductName("Black & White Diamond Heart");
   }
-
-
 }
