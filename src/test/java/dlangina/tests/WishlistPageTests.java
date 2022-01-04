@@ -1,7 +1,5 @@
 package dlangina.tests;
 
-import static dlangina.base.Api.authCookies;
-
 import dlangina.base.TestBase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +11,8 @@ public class WishlistPageTests extends TestBase {
   @BeforeEach
   void ensurePrecondition() {
     api.openBrowserAndLoginByAPI("dlangina@qa.guru", "dlangina@qa.guru1");
-    api.addToWishListWithResponse(authCookies, "addproducttocart/details/14/2");
+    api.addToWishListWithResponse("dlangina@qa.guru", "dlangina@qa.guru1",
+                                  "addproducttocart/details/14/2");
     navigation.openWishlistPage();
   }
 

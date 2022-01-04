@@ -8,13 +8,11 @@ import static io.restassured.RestAssured.given;
 
 import io.qameta.allure.Step;
 import io.restassured.RestAssured;
-import io.restassured.http.Cookies;
 import io.restassured.response.Response;
 import org.openqa.selenium.Cookie;
 
 public class Api {
 
-  public static Cookies authCookies;
   String getWishListItemCounter;
   Response wishListItemsQuantity;
 
@@ -25,31 +23,31 @@ public class Api {
   }
 
   public void openBrowserAndLoginByAPI(String email, String pass) {
-    loginAndGetCookies(email, pass);
+    String cookie = getCookie(email, pass);
     open("");
-    addAuthCookieToBrowser("NOPCOMMERCE.AUTH");
+    addAuthCookieToBrowser(cookie);
     open("");
     remainingLogin(email);
   }
 
   @Step("Авторизация пользователя")
-  private Cookies loginAndGetCookies(String email, String pass) {
-    return authCookies =
-        given()
-            .contentType("application/x-www-form-urlencoded; charset=UTF-8")
-            .formParam("Email", email)
-            .formParam("Password", pass)
-            .when()
-            .post("/login")
-            .then()
-            .statusCode(302)
-            .extract().response().getDetailedCookies();
+  private String getCookie(String email, String pass) {
+    return given()
+        .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+        .formParam("Email", email)
+        .formParam("Password", pass)
+        .when()
+        .post("/login")
+        .then()
+        .statusCode(302)
+        .extract()
+        .cookie("NOPCOMMERCE.AUTH");
   }
 
-  public Response addToWishListWithResponse(Cookies cookies, String product) {
+  public Response addToWishListWithResponse(String email, String pass, String product) {
     return
         given()
-            .cookies(cookies)
+            .cookie(getCookie(email, pass))
             .when()
             .post(product)
             .then()
@@ -57,9 +55,9 @@ public class Api {
             .extract().response();
   }
 
-  public static void addAuthCookieToBrowser(String cookieName) {
+  void addAuthCookieToBrowser(String cookie) {
     getWebDriver().manage().addCookie(
-        new Cookie(cookieName, authCookies.getValue(cookieName)));
+        new Cookie("NOPCOMMERCE.AUTH", cookie));
   }
 
   @Step("Проверка успешности авторизации")
@@ -67,9 +65,12 @@ public class Api {
     $(".account").shouldHave(exactText(email));
   }
 
-//  wishListItemsQuantity =
+//  void testTest() {
+//    wishListItemsQuantity =
 //
-//  addToWishListWithResponse(authCookies, "addproducttocart/details/14/2");
+//        addToWishListWithResponse(authCookies, "addproducttocart/details/14/2");
 //
-//  getWishListItemCounter =wishListItemsQuantity.path("updatetopwishlistsectionhtml");
+//    getWishListItemCounter = wishListItemsQuantity.path("updatetopwishlistsectionhtml");
+//  }
+
 }
