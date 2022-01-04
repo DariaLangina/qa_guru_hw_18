@@ -20,8 +20,8 @@ public class Api {
   }
 
   @Step("Открытие браузера и авторизация пользователя по API")
-  public void openBrowserAndLoginByAPI(String email, String pass) {
-    String authCookie = loginAndGetCookies(email, pass);
+  public void openBrowserAndLoginByAPI(String authCookie, String email) {
+//    String authCookie = getCookieByApi(email, pass);
     open("");
     addAuthCookieToBrowser(authCookie);
     open("");
@@ -29,19 +29,19 @@ public class Api {
   }
 
   @Step("Добавление товара в Wishlist по API")
-  public void addProductToWishListByApi(String email, String pass, String product) {
-    String authCookie = loginAndGetCookies(email, pass);
+  public void addProductToWishListByApi(String authCookie, String product) {
+//    String authCookie = getCookieByApi(email, pass);
     addProductToWishList(authCookie, product);
   }
 
 
-  private String loginAndGetCookies(String email, String pass) {
+  public String getCookieByApi(String email, String pass) {
     return given()
         .contentType("application/x-www-form-urlencoded; charset=UTF-8")
         .formParam("Email", email)
         .formParam("Password", pass)
         .when()
-        .post("/login")
+        .post("login")
         .then()
         .statusCode(302)
         .extract().cookie("NOPCOMMERCE.AUTH");

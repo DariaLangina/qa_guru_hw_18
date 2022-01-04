@@ -15,8 +15,9 @@ public class WishlistPageTests extends TestBase {
     String pass = "dlangina@qa.guru1";
     String product = "addproducttocart/details/14/2";
 
-    api.openBrowserAndLoginByAPI(email, pass);
-    api.addProductToWishListByApi(email, pass, product);
+    String cookie = api.getCookieByApi(email, pass);
+    api.openBrowserAndLoginByAPI(cookie, email);
+    api.addProductToWishListByApi(cookie, product);
     navigation.openWishlistPage();
   }
 
