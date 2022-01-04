@@ -23,13 +23,16 @@ public class WishlistPageTests extends TestBase {
 
   @AfterEach
   void ensurePostcondition() {
-    //TODO удалять добавленный в Wishlist товар по API
+    //TODO удалить добавленный в Wishlist товар по API
   }
 
   @Test
   @Tag("UI")
-  @DisplayName("Проверка оторажения товара на странице Wishlist")
-  void addToWishList() {
-    wishlistPage.checkProductName("Black & White Diamond Heart");
+  @DisplayName("Проверка элементов страницы с добавленным товаром'")
+  void checkProductName() {
+    wishlistPage
+        .checkProductName("Black & White Diamond Heart")
+        .checkSharing();
+    //TODO проверка остальных элементов
   }
 }
